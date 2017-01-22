@@ -5,7 +5,7 @@
             "name": "启动",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}/12-web模块/02-POST方法/server.js",
+            "program": "${workspaceRoot}/13-Express框架/04-Cookie管理/express_cookie.js",
             "stopOnEntry": false,
             "args": [],
             "cwd": "${workspaceRoot}",
