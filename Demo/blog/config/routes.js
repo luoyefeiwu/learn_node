@@ -5,14 +5,14 @@ module.exports=function(app){
     });
 
     app.get('/login',function(req,res,next){
-        res.send('登录');
+        res.render('login',{title:'登陆'});
     });
 
     app.get('/reg',function(req,res,next){
-        res.send('注册');
-    })
+        res.render('reg',{title:"注册"})
+    });
 
     app.get('/logout',function(req,res,next){
-        res.send('登出');
-    })
+        res.render('logout',{title:"退出"})
+    });
 }
