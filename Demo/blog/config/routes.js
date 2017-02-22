@@ -13,7 +13,12 @@ module.exports = function (app) {
     });
 
     app.post('/reg', function (req, res, next) {
-        res.render('注册成功');
+      var postDate={
+        name:req.body.name,
+        password:req.body.password
+      };
+        console.log(postDate);
+        res.send('注册成功');
     });
 
     app.get('/logout', function (req, res, next) {
