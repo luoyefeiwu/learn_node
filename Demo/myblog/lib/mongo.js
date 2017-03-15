@@ -43,7 +43,7 @@ exports.Post.index({ author: 1, _id: -1 }).exec();// 按创建时间降序查看
 exports.Comment=mongolass.model('Comment',{
   author:{ type: Mongolass.Types.ObjectId },
   content:{ type: 'string' },
-  postId:{ type: mongolass.Types.ObjectId }
+  postId:{ type: Mongolass.Types.ObjectId }
 });
 
 exports.Comment.index({postId:1,_id:1}).exec();//通过文章Id获取该文章下的所有留言 按留言创建时间升序
