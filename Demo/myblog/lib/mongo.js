@@ -5,9 +5,6 @@ var moment=require('moment');
 var objectIdToTimestamp = require('objectid-to-timestamp');
 mongolass.connect(config.mongodb);
 
-var moment = require('moment');
-var objectIdToTimestamp = require('objectid-to-timestamp');
-
 exports.User = mongolass.model('User', {
   name: { type: 'string' },
   password: { type: 'string' },
