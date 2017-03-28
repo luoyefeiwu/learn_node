@@ -1,0 +1,15 @@
+{
+  "name": "learn",
+  "version": "1.0.0",
+  "description": "Test learn Node Demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hcw",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^2.2.25",
+    "mongoose": "^4.9.2"
+  }
+}
