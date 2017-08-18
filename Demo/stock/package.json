@@ -1,0 +1,22 @@
+{
+  "name": "stock",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "express": "3.3.1",
+    "ejs": "*",
+    "mongodb": "*",
+    "connect-mongo": "*",
+    "connect-flash": "*",
+    "socket.io": "*",
+    "gm": "*",
+    "async": "*",
+    "redis": "*",
+    "request": "*",
+    "serve-favicon": "*",
+    "morgan": "*"
+  }
+}
