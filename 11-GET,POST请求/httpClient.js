@@ -9,8 +9,8 @@ var options={
    port:54235,  
    path:'/home/index',  
    method:'POST',  
-   header:{  
-    //'Content-Type':'application/x-www-form-urlencoded',  
+   headers:{  
+    //'Content-Type':'application/json',  
     'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8',  
     'Content-Length':Buffer.byteLength(postData)  
    }  
