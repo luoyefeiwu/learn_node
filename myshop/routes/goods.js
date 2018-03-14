@@ -38,13 +38,12 @@ router.get("/list", function (req, res, next) {
         params={
             salePrice:{
                 $gt:priceGt,
-                $lte:priceLte
+                $lt:priceLte
             }
         }
     }
     let goodsModel=Goods.find(params).skip(skip).limit(pageSize);
     goodsModel.sort({'salePrice':sort});
-    //let goodsModel=Goods.find({});
     goodsModel.exec(function(err,doc){
         res.setHeader('Access-Control-Allow-Origin','*');
         if(err){
