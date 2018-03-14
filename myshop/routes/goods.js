@@ -42,10 +42,11 @@ router.get("/list", function (req, res, next) {
             }
         }
     }
-    //let goodsModel=Goods.find(params).skip(skip).limit(pageSize);
-    //goodsModel.sort({'salePrice':sort});
-    let goodsModel=Goods.find({});
+    let goodsModel=Goods.find(params).skip(skip).limit(pageSize);
+    goodsModel.sort({'salePrice':sort});
+    //let goodsModel=Goods.find({});
     goodsModel.exec(function(err,doc){
+        res.setHeader('Access-Control-Allow-Origin','*');
         if(err){
             res.json({
                 status:1,
