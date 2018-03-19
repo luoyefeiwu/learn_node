@@ -4,24 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var index = require('./routes/index');
 var users = require('./routes/users');
 var goods = require('./routes/goods');
-
 var app = express();
-//设置跨域访问
-app.all('*', function (req, res, next) {
-
-  res.header("Access-Control-Allow-Origin", req.headers.origin);//显示设置来源
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Credentials", true);//带cookies
-  res.header("X-Powered-By", ' 3.2.1');
-  res.header("Content-Type", "application/json;charset=utf-8");
-  next();
-});
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -33,6 +19,35 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//设置跨域访问
+app.all('*', function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", req.headers.origin);//显示设置来源
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Credentials", true);//带cookies
+  res.header("X-Powered-By", ' 3.2.1');
+  res.header("Content-Type", "application/json;charset=utf-8");
+  next();
+});
+
+//登陆拦截
+app.use(function (req, res, next) {
+  if (req.cookies.userId) {
+    next();
+  } else {
+    if (req.originalUrl == '/users/login' || req.originalUrl == '/users/logout' || req.path.indexOf('/goods/list' > -1)) {
+      next();
+    } else {
+      res.json({
+        status: '10001',
+        msg: '未登录',
+        result: ''
+      });
+    }
+  }
+});
+
 
 app.use('/', index);
 app.use('/users', users);
