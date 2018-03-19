@@ -19,6 +19,16 @@ mongoose.connection.on("disconnected", function () {
     console.log("MongoDB connected disconnected.")
 });
 
+//必须放入方法顶部分
+// router.all('*', function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+//     res.header("X-Powered-By", ' 3.2.1');
+//     res.header("Content-Type", "application/json;charset=utf-8");
+//     next();
+// });
+
 //查询商品列表数据
 router.get("/list", function (req, res, next) {
     let page = parseInt(req.param('page'));
@@ -45,7 +55,6 @@ router.get("/list", function (req, res, next) {
     let goodsModel = Goods.find(params).skip(skip).limit(pageSize);
     goodsModel.sort({ 'salePrice': sort });
     goodsModel.exec(function (err, doc) {
-        res.setHeader('Access-Control-Allow-Origin', '*');
         if (err) {
             res.json({
                 status: 1,
@@ -65,58 +74,75 @@ router.get("/list", function (req, res, next) {
     });
 
 });
-
 //加入到购物车
-router.post('/addCart', function (req, res, next) {
-   
-    var userId = '1000007', productId = req.body.productId;
+router.post("/addCart", function (req, res, next) {
+    var userId = '100000077', productId = req.body.productId;
     var User = require('../models/users');
-    User.findOne({ userId: userId }, function (err, result) {
+    //CrossDomain(res)
+    User.findOne({ userId: userId }, function (err, userDoc) {
         if (err) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json({
                 status: "1",
                 msg: err.message
             })
         } else {
-            console.log('result:' + result);
-            if (result) {
-                Goods.findOne({ productId: productId }).then((err1, doc) => {
-                    if (err1) {
-                        res.setHeader('Access-Control-Allow-Origin', '*');
-                        res.json({
-                            status: "1",
-                            msg: err1.message
-                        });
-                    } else {
-                        if (doc) {
-                            doc.productNum = 1;
-                            doc.checked = 1;
-                            User.cartList.push(doc);
-                            User.save((err2, doc2) => {
-                              
-                                if (err2) {
-                                    res.setHeader('Access-Control-Allow-Origin', '*');
-                                    res.json({
-                                        status: "1",
-                                        msg: err2.message
-                                    });
-                                } else {
-                                    res.setHeader('Access-Control-Allow-Origin', '*');
-                                    res.json({
-                                        status: "0",
-                                        msg: "",
-                                        result: 'suc'
-                                    });
-                                }
-                            });
-                        }
+            console.log("userDoc:" + userDoc);
+            if (userDoc) {
+                var goodsItem = '';
+                userDoc.cartList.forEach(function (item) {
+                    if (item.productId == productId) {
+                        goodsItem = item;
+                        item.productNum++;
                     }
                 });
+                if (goodsItem) {
+                    userDoc.save(function (err2, doc2) {
+                        if (err2) {
+                            res.json({
+                                status: "1",
+                                msg: err2.message
+                            })
+                        } else {
+                            res.json({
+                                status: '0',
+                                msg: '',
+                                result: 'suc'
+                            })
+                        }
+                    })
+                } else {
+                    Goods.findOne({ productId: productId }, function (err1, doc) {
+                        if (err1) {
+                            res.json({
+                                status: "1",
+                                msg: err1.message
+                            })
+                        } else {
+                            if (doc) {
+                                doc.productNum = 1;
+                                doc.checked = 1;
+                                userDoc.cartList.push(doc);
+                                userDoc.save(function (err2, doc2) {
+                                    if (err2) {
+                                        res.json({
+                                            status: "1",
+                                            msg: err2.message
+                                        })
+                                    } else {
+                                        res.json({
+                                            status: '0',
+                                            msg: '',
+                                            result: 'suc'
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    });
+                }
             }
         }
-    });
-
+    })
 });
 
 module.exports = router;
