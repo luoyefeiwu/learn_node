@@ -51,7 +51,7 @@ router.post('/logout', function (req, res, next) {
     msg: '',
   });
 });
-
+//检查登陆
 router.get('/checkLogin', function (req, res, next) {
   if (req.cookies.userId) {
     res.json({
@@ -66,6 +66,25 @@ router.get('/checkLogin', function (req, res, next) {
       result: ''
     });
   }
+});
+//查询当前用户的购物车信息
+router.get('/cartList', function (req, res, netx) {
+  var userId = req.cookies.userId;
+  User.findOne({ userId: userId }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message,
+        result: ''
+      });
+    } else {
+      res.json({
+        status: '0',
+        msg: '',
+        result: doc.cartList
+      });
+    }
+  });
 });
 
 module.exports = router;

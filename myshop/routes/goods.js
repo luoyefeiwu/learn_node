@@ -76,7 +76,7 @@ router.get("/list", function (req, res, next) {
 });
 //加入到购物车
 router.post("/addCart", function (req, res, next) {
-    var userId = '100000077', productId = req.body.productId;
+    var userId = req.cookies.userId, productId = req.body.productId;
     var User = require('../models/users');
     //CrossDomain(res)
     User.findOne({ userId: userId }, function (err, userDoc) {
