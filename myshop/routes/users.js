@@ -86,5 +86,30 @@ router.get('/cartList', function (req, res, netx) {
     }
   });
 });
+//删除购物车
+router.post('/delCart', function (req, res, next) {
+  let productId = req.body.productId, userId = req.cookies.userId;
+  User.update({ userId: userId }, {
+    $pull: {
+      'cartList': {
+        'productId': productId
+      }
+    }
+  }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message,
+        result: ''
+      });
+    } else {
+      res.json({
+        status: '0',
+        msg: '',
+        result: 'suc'
+      });
+    }
+  });
+});
 
 module.exports = router;
