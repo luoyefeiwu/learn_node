@@ -129,7 +129,7 @@ router.post('/delCart', function (req, res, next) {
 //全选或者取消全选
 router.post('/editCheckAll', function (req, res, next) {
   let userId = req.cookies.userId,
-    checkAll = req.body.checkAll?'1':'0';
+    checkAll = req.body.checkAll ? '1' : '0';
 
   User.findOne({ userId: userId }, function (err, user) {
     if (err) {
@@ -153,6 +153,41 @@ router.post('/editCheckAll', function (req, res, next) {
   });
 
 
+});
+//查询地址接口
+router.get('/addressList', function (req, res, next) {
+  var userId = req.cookies.userId;
+  User.findOne({ userId: userId }, function (err, doc) {
+    if (err) {
+      res.json({ status: '1', msg: err.message, result: '' });
+    } else {
+      res.json({ status: '0', msg: '', result: doc.addressList });
+    }
+  });
+});
+
+router.post('/setDefault', function (req, res, netx) {
+  var userId = req.cookies.userId, addressId = req.body.addressId;
+  User.findOne({ userId: userId }, function (err, doc) {
+    if (err) {
+      res.json({ status: '1', msg: err.message, result: '' });
+    } else {
+      doc.addressList.forEach((item) => {
+        if (item.addressId == addressId) {
+          item.isDefault = true;
+        } else {
+          item.isDefault = false;
+        }
+        doc.save(function (err1, doc1) {
+          if (err1) {
+            res.json({ status: '1', msg: err.message, result: '' });
+          } else {
+            res.json({ status: '0', msg: '', result: '' });
+          }
+        });
+      });
+    }
+  });
 });
 
 module.exports = router;
